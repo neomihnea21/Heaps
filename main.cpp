@@ -32,7 +32,7 @@ private:
     }
     node* mergeSons(node* h){ ///asta, de fapt, scoate maximul
         if(h==NULL||h->bro==NULL)
-            return h;
+            return h;///sf. iulia din sziget!
         node* one=h;
         node* two=h->bro;
         node* three=h->bro->bro;
@@ -88,12 +88,12 @@ int main()
 {
     std::ifstream fin("heap.in");
     std::ofstream fout("heap.out");
-    int n, opcode; fin>>n;
+    int n, opcount, opcode; fin>>n>>opcount;
     for(int i=0; i<n; i++){
        pairingHeap temp;
        h.push_back(temp);
     }
-    for(int i=0; i<n; i++){
+    for(int i=0; i<opcount; i++){
        fin>>opcode;
        if(opcode==1){
           int id, val; fin>>id>>val;
@@ -101,7 +101,7 @@ int main()
        }
        else if(opcode==2){
           int id; fin>>id;
-          fout<<h[id].findMax();
+          fout<<h[id].findMax()<<"\n";
           h[id].pop();
        }
        else if(opcode==3){
