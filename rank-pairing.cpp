@@ -40,31 +40,32 @@ private:
         return mergeNodes(mergeNodes(one, two), mergeSons(three));
     }
 public:
+    pairingHeap(): root(NULL) {}
     pairingHeap(int key){
-        root=new node(key); ///ca sa il stearga, trb alocare dinamica
+        root=new node(key); ///aloc dinamic noul nod, ca ii voi da delete mai incolo
     }
-    pairingHeap(node* root_=NULL): root(root_) {}
-    int findMax(){
-        return root->val;
+    pairingHeap(node* root_): root(root_) {}
+    int findMax(){///nu va fi apelat pe vid niciodata
+        return root->val;///minimul e mereu in varf
     }
     void mergeHeap(pairingHeap other){
         if(root==NULL){
             root=other.root;
             return;
         }
-        else if(other.root==NULL)
+        if(other.root==NULL)
             return;
         if(root->val<other.root->val)
             swap(root, other.root);
-        other.root->bro=root->child;
+        other.root->bro=root->child;///o facem pe aia cu radacina mica fiica a aleia cu radacina mare, asta e merge-ul in  a nutshell
         root->child=other.root;
         other.root=NULL;
     }
     void push(int key){
-        mergeHeap(pairingHeap(key));
+        mergeHeap(pairingHeap(key));///push-ul poate fi modelat ca un merge
     }
     void pop(){
-        node *temp=root;
+        node *temp=root;///scoaterea inseamna sa interclasam tot nivelul pe care se afla
         root=mergeSons(temp->child);
         delete temp;///la ce foloseste temp, naiba stie
     }
@@ -72,27 +73,23 @@ public:
         mergeHeap(other);
         other.root=NULL;///dupa ce o amesteca, o distruge, ca sa nu ocupe memoria degeaba
     }
-    void decKey(node* h, int amount){ ///scade fiul lui h cu cat zic eu
+    void incKey(node* h, int amount){ ///creste fiul lui h cu cat zic eu
        if(amount<0)
           std::cout<<"NU POTI CRESTE CHEIA\n";
        else{
-          node* kid=h->child;
+          node* kid=h->child;///ia separat fiul lui h
           h->child=NULL;
-          (kid->val)-=amount;
-          mergeHeap(pairingHeap(kid));
+          (kid->val)+=amount; ///creste cheia, ca nu se strica proprietatea de heap
+          mergeHeap(pairingHeap(kid));///si interclaseaza unde s-o potrivi
        }
     }
 };
-std::vector<pairingHeap> h; ///nu vom dezaloca un heap interclasat, se mai poate baga in el
+pairingHeap h[2000];
 int main()
 {
-    std::ifstream fin("heap.in");
-    std::ofstream fout("heap.out");
+    std::ifstream fin("mergeheap.in");
+    std::ofstream fout("mergeheap.out");
     int n, opcount, opcode; fin>>n>>opcount;
-    for(int i=0; i<n; i++){
-       pairingHeap temp;
-       h.push_back(temp);
-    }
     for(int i=0; i<opcount; i++){
        fin>>opcode;
        if(opcode==1){
@@ -106,7 +103,7 @@ int main()
        }
        else if(opcode==3){
           int id, otherId; fin>>id>>otherId;
-          h[id].mergeHeap(h[otherId]);
+          h[id].mergeSet(h[otherId]);
        }
     }
     return 0;
