@@ -427,23 +427,6 @@ void mergeheaps(int a,int b)
     }
 }
 
-void print_tree(node* nod)
-{
-    for(auto w:nod->values)
-    {
-        cout<<w<<" ";
-    }
-    cout<<"\n";
-    for(auto w:nod->children)
-    {
-        print_tree(w);
-    }
-    for(auto w:nod->values)
-    {
-        cout<<w<<" ";
-    }
-    cout<<"\n";
-}
 
 int main()
 {
@@ -460,8 +443,11 @@ int main()
         if(op==2)
         {
             in>>a;
-            out<<-roots[a]->values[0]<<"\n";
-            rem(a);
+            if(roots[a]!=NULL)
+            {
+                out<<-roots[a]->values[0]<<"\n";
+                rem(a);
+            }
         }
         if(op==3)
         {
