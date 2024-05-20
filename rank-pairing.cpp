@@ -32,7 +32,7 @@ private:
     }
     node* mergeSons(node* h){ ///asta, de fapt, scoate maximul
         if(h==NULL||h->bro==NULL)
-            return h;///sf. iulia din sziget!
+            return h;
         node* one=h;
         node* two=h->bro;
         node* three=h->bro->bro;
